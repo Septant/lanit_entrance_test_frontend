@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ServerAction, ServerResponse} from "../models/server.model";
 import {environment} from "../../environments/environment";
@@ -9,7 +9,8 @@ import {Observable} from "rxjs";
 })
 export class ServerService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   private static getPath(action: ServerAction, data = '') {
     return (data)
@@ -21,7 +22,15 @@ export class ServerService {
     return this.httpClient.get<ServerResponse>(ServerService.getPath(action, data));
   }
 
+  public postServer(action: ServerAction, data: any): Observable<ServerResponse> {
+    return this.httpClient.post<ServerResponse>(ServerService.getPath(action, ''), data);
+  }
+
   public serverPut(action: ServerAction, path: string, data: any): Observable<ServerResponse> {
-    return this.httpClient.put<ServerResponse>(ServerService.getPath(action, ''), data);
+    return this.httpClient.put<ServerResponse>(ServerService.getPath(action, '') + '/' + path, data);
+  }
+
+  public serverDelete(action: ServerAction, path: string): Observable<ServerResponse> {
+    return this.httpClient.delete<ServerResponse>(ServerService.getPath(action, '') + '/' + path);
   }
 }

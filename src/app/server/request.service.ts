@@ -13,12 +13,22 @@ export class RequestService {
               private responseService: ResponseService) {
   }
 
-  public getFriendList(): void {
-    this.responseService.serverResponse(this.serverService.getServer(ServerAction.userTable,), ServerAction.userTable);
+  public getUserList(): void {
+    this.responseService.serverResponse(this.serverService.getServer(ServerAction.users, ''), ServerAction.users);
   }
 
-  public putUpdateUser(user: User): void {
-    this.responseService.serverResponse(this.serverService.serverPut(ServerAction.updateUsersTable, '', {user}),
-      ServerAction.updateUsersTable);
+  public updateUser(user: User): void {
+    this.responseService.serverResponse(this.serverService.serverPut(ServerAction.user, user.id.toString(), {user}),
+      ServerAction.user);
+  }
+
+  public deleteUser(id: number): void {
+    this.responseService.serverResponse(this.serverService.serverDelete(ServerAction.user, id.toString()),
+      ServerAction.user);
+  }
+
+  public createUser(user: User): void {
+    this.responseService.serverResponse(this.serverService.postServer(ServerAction.user, {user}),
+      ServerAction.user);
   }
 }

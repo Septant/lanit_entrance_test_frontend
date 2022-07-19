@@ -6,9 +6,11 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
+
 
 import {AppComponent} from './app.component';
-import {TableComponentComponent} from './table-component/table-component.component';
+import {TableComponent} from './table.component/table.component';
 import {HttpClientModule} from "@angular/common/http";
 import { UserComponent } from './user/user.component';
 import {MatDialogModule} from "@angular/material/dialog";
@@ -21,7 +23,7 @@ import { GetFormatDatePipe } from './pipes/get-format-date.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    TableComponentComponent,
+    TableComponent,
     UserComponent,
     GetFormatDatePipe,
   ],
@@ -38,9 +40,10 @@ import { GetFormatDatePipe } from './pipes/get-format-date.pipe';
     MatInputModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatSortModule
+    MatSortModule,
+    MatNativeDateModule
   ],
-  providers: [],
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'ru-RU'}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

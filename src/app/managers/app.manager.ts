@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ResponseService} from "../server/response.service";
 import {RequestService} from "../server/request.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 import {User} from "../models/app.model";
 
 @Injectable({
@@ -14,14 +14,26 @@ export class AppManager {
   }
 
   public userList(): BehaviorSubject<User[]> {
-    return this.responseService.userTable;
+    return this.responseService.userList;
   }
 
   public getUserList(): void {
-    this.requestService.getFriendList();
+    this.requestService.getUserList();
   }
 
-  public updateUser(user: User) {
-    this.requestService.putUpdateUser(user);
+  public updateUser(user: User): void {
+    this.requestService.updateUser(user);
+  }
+
+  public deleteUser(id: number): void {
+    this.requestService.deleteUser(id);
+  }
+
+  public createUser(user: User): void {
+    this.requestService.createUser(user);
+  }
+
+  public userListUpdate(): Subject<boolean> {
+    return this.responseService.userListUpdated;
   }
 }

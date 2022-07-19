@@ -1,10 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {User} from "../models/app.model";
-import {
-  ServerResponse,
-  TitledText
-} from "../models/server.model";
+import {TitledText, User} from "../models/app.model";
+import {ServerResponse} from "../models/server.model";
 import {ServerAction, ServerResponseUserTable, ServerStatus} from "../models/server.model";
 
 @Injectable({
@@ -12,8 +9,9 @@ import {ServerAction, ServerResponseUserTable, ServerStatus} from "../models/ser
 })
 export class ResponseService {
 
-  userTable = new BehaviorSubject<User[]>([]);
+  userList = new BehaviorSubject<User[]>([]);
   alert = new Subject<TitledText>();
+  userListUpdated = new Subject<boolean>();
 
   constructor() {
   }
@@ -24,16 +22,14 @@ export class ResponseService {
         if (result) {
           if (result.status === ServerStatus.success) {
             switch (action) {
-              case ServerAction.userTable:
+              case ServerAction.users:
                 const responseUserList = result as ServerResponseUserTable;
-                this.userTable.next((responseUserList.data) ? responseUserList.data : []);
+                this.userList.next((responseUserList.data) ? responseUserList.data : []);
                 break;
-              /*case ServerAction.updateUsersTable:
-                const responseAnswer = result as ServerResponseAnswer;
-                this.answer.next((responseAnswer.data) ? responseAnswer.data : null);
-                break;*/
+              case ServerAction.user:
+                this.userListUpdated.next(true);
+                break;
             }
-
 
           } else if (result.status === ServerStatus.error) {
             this.alert.next({

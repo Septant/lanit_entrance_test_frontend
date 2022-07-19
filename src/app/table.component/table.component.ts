@@ -7,13 +7,13 @@ import {MatDialog} from "@angular/material/dialog";
 
 
 @Component({
-  selector: 'app-table-component',
-  templateUrl: './table-component.component.html',
-  styleUrls: ['./table-component.component.scss']
+  selector: 'app-table',
+  templateUrl: './table.component.html',
+  styleUrls: ['./table.component.scss']
 })
-export class TableComponentComponent implements OnInit, OnDestroy {
+export class TableComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['id', 'name', 'surname', 'date_of_birth', 'created', 'updated', 'edit'];
+  displayedColumns: string[] = ['id', 'name', 'surname', 'date_of_birth', 'created', 'updated', 'edit', 'delete'];
   dataSource: User[] = [];
   subscription: Subscription;
 
@@ -22,9 +22,11 @@ export class TableComponentComponent implements OnInit, OnDestroy {
     this.subscription = appManager.userList().subscribe(result => {
       if (result) {
         this.dataSource = result;
-        console.log(result);
       }
-    })
+    });
+    this.subscription.add(appManager.userListUpdate().subscribe ( result => {
+      this.appManager.getUserList();
+    }));
   }
 
   ngOnInit(): void {
@@ -49,4 +51,22 @@ export class TableComponentComponent implements OnInit, OnDestroy {
   }
 
 
+  deleteUser(id: number) {
+    this.appManager.deleteUser(id);
+  }
+
+  createUser() {
+
+    const dialogRef = this.dialog.open(UserComponent, {
+      width: '700px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.appManager.createUser(result);
+      }
+    });
+  }
 }
