@@ -1,7 +1,10 @@
-import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from "../models/app.model";
 import {Subscription} from "rxjs";
 import {AppManager} from "../managers/app.manager";
+import {UserComponent} from "../user/user.component";
+import {MatDialog} from "@angular/material/dialog";
+
 
 @Component({
   selector: 'app-table-component',
@@ -10,13 +13,12 @@ import {AppManager} from "../managers/app.manager";
 })
 export class TableComponentComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['id', 'name', 'surname', 'date_of_birth', 'created', 'updated'];
+  displayedColumns: string[] = ['id', 'name', 'surname', 'date_of_birth', 'created', 'updated', 'edit'];
   dataSource: User[] = [];
   subscription: Subscription;
-  editedUser: User|null = null;
-  isEdit: boolean = false;
 
-  constructor(private appManager: AppManager) {
+  constructor(private appManager: AppManager,
+              private dialog: MatDialog) {
     this.subscription = appManager.userList().subscribe(result => {
       if (result) {
         this.dataSource = result;
@@ -32,35 +34,19 @@ export class TableComponentComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  editUser(userId: number) {
-    this.isEdit = true;
-    if(this.editedUser)
-    this.editedUser =  this.dataSource[userId];
-  }
+  editUser(user: User) {
+    const dialogRef = this.dialog.open(UserComponent, {
+      width: '700px',
+      data: user
+    });
 
-  saveUser() {
-    this.isEdit = false;
-    if(this.editedUser)
-    this.appManager.updateUser(this.editedUser.id, this.editedUser.name, this.editedUser.surname, this.editedUser.date_of_birth);
-  }
-
- /* isEdit: boolean = false;
-
-  editIt(id: number) {
-     this.isEdit = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result);
+        this.appManager.updateUser(result);
+      }
+    });
   }
 
 
-  send(id: number, name: string, surname: string, date_of_birth: string) {
-
-    this.appManager.updateUserList(id, name, surname, date_of_birth);
-  }
-
-  cancel() {
-
-  }*/
-  cancel() {
-    this.isEdit = false;
-    this.editedUser = null;
-  }
 }

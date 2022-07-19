@@ -3,7 +3,7 @@ export interface User {
     name: string,
     surname: string,
     date_of_birth: string,
-    created_at: string,
-    updated_at: string,
+    created: string,
+    updated: string,
 }
 

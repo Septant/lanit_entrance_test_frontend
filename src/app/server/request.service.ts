@@ -17,9 +17,8 @@ export class RequestService {
     this.responseService.serverResponse(this.serverService.getServer(ServerAction.userTable,), ServerAction.userTable);
   }
 
-  public postUpdateUser(id: number, name: string, surname: string, date_of_birth: string): void {
-    this.responseService.serverResponse(this.serverService.postServer
-    (ServerAction.updateUsersTable, {id, name, surname, date_of_birth}),
+  public putUpdateUser(user: User): void {
+    this.responseService.serverResponse(this.serverService.serverPut(ServerAction.updateUsersTable, '', {user}),
       ServerAction.updateUsersTable);
   }
 }

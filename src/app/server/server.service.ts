@@ -21,8 +21,7 @@ export class ServerService {
     return this.httpClient.get<ServerResponse>(ServerService.getPath(action, data));
   }
 
-  public postServer(action: ServerAction, data: any): Observable<ServerResponse> {
-    return this.httpClient.post<ServerResponse>(ServerService.getPath(action, ''), data);
+  public serverPut(action: ServerAction, path: string, data: any): Observable<ServerResponse> {
+    return this.httpClient.put<ServerResponse>(ServerService.getPath(action, ''), data);
   }
-
 }

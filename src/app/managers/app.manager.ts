@@ -21,7 +21,7 @@ export class AppManager {
     this.requestService.getFriendList();
   }
 
-  public updateUser(id: number, name: string, surname: string, date_of_birth: string) {
-    this.requestService.postUpdateUser(id, name, surname, date_of_birth);
+  public updateUser(user: User) {
+    this.requestService.putUpdateUser(user);
   }
 }
